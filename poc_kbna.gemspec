@@ -25,4 +25,18 @@ Gem::Specification.new do |spec|
   spec.bindir = "exe"
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+
+
+
+  spec.add_dependency("builder")
+  spec.add_dependency("bundler")
+  spec.add_dependency("rake")
+  spec.add_dependency("activesupport")
+
+  spec.add_development_dependency("pry-byebug", "~> 3.9")
+  spec.add_development_dependency("uuid", "~> 2.3", ">= 2.3.9")
+  spec.add_development_dependency("rspec", "~> 3.10")
+  spec.add_development_dependency("guard-rspec", "~> 4.7")
+  spec.add_development_dependency("webmock", "~> 3.13")
+  spec.add_development_dependency("dotenv", "~> 2.7", ">= 2.7.6")
 end

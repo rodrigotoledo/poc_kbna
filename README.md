@@ -22,7 +22,26 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+### Setup the environment variables
+
+```
+POC_KBNA_ENV
+POC_KBNA_TOKEN
+POC_KBNA_USER_AGENT
+POC_KBNA_PIX_ACCOUNT_ID
+```
+
+and in your initializer
+
+```
+PocKbna.configure do |config|
+  config.env            = 'sandbox' # or production
+  config.token          = 'you_token'
+  config.user_agent     = 'you_user_agent'
+  config.pix_account_id = 'you_pix_account_id'
+end
+```
+
 
 ## Development
 
