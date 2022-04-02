@@ -6,12 +6,13 @@ require 'active_support/core_ext'
 module PocKbna
   module Pix
     class Payment
-      attr_accessor :pix_url, :amount, :read_body
+      attr_accessor :pix_url, :amount, :expire_at, :read_body
 
       def initialize(amount = nil)
         PocKbna.configuration.valid?
 
-        @amount = amount
+        @amount     = amount
+        @expire_at  = Time.now+1.days
       end
 
       def charge
@@ -25,21 +26,17 @@ module PocKbna
         request["User-Agent"] = PocKbna.configuration.user_agent
         request["Content-Type"] = 'application/json'
         request["Authorization"] = "Bearer #{PocKbna.configuration.token}"
-        request.body = "{\"amount\":#{@amount},\"pix_account_id\":#{PocKbna.configuration.pix_account_id},\"expire_at\":\"#{Time.now+1.days}\"}"
+        request.body = "{\"amount\":#{@amount},\"pix_account_id\":#{PocKbna.configuration.pix_account_id},\"expire_at\":\"#{@expire_at}\"}"
 
         response = http.request(request)
-        @read_body = response.read_body
+        @read_body = JSON.parse(response.read_body)
         if success?
           @read_body
         else
-          error = @read_body["errors"].first
-          raise error["title"]
+          errors = @read_body["errors"]
+          raise errors.map{|t| t["title"]}.to_sentence
         end
       end
-
-
-
-
 
       private
         def success?
@@ -51,7 +48,7 @@ module PocKbna
         end
 
         def pix_url
-          "#{PocKbna.endpoint}/v2/charge/pix"
+          "#{PocKbna.endpoint}/charge/pix"
         end
     end
   end
